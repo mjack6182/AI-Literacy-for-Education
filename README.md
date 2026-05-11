@@ -120,12 +120,109 @@ Content was researched and synthesized from the following institutions and publi
 
 ## Running Locally
 
-```bash
+Follow these steps to run the project on your own computer. No prior experience required.
+
+---
+
+### Step 1 — Install Node.js
+
+Node.js is the engine that runs the project. You only need to install it once.
+
+**On Mac:**
+
+1. Open your browser and go to [https://nodejs.org](https://nodejs.org)
+2. Click the button labeled **"LTS"** (the recommended version)
+3. Open the downloaded `.pkg` file and follow the installer steps
+4. When it finishes, open the **Terminal** app (press `Cmd + Space`, type `Terminal`, press Enter)
+5. Type the following and press Enter to confirm the install worked:
+   ```
+   node --version
+   ```
+   You should see a version number like `v20.x.x`.
+
+**On Windows:**
+
+1. Open your browser and go to [https://nodejs.org](https://nodejs.org)
+2. Click the button labeled **"LTS"** (the recommended version)
+3. Open the downloaded `.msi` file and follow the installer steps — accept all defaults
+4. When it finishes, open **Command Prompt** (press `Windows key`, type `cmd`, press Enter)
+5. Type the following and press Enter to confirm the install worked:
+   ```
+   node --version
+   ```
+   You should see a version number like `v20.x.x`.
+
+---
+
+### Step 2 — Download the project
+
+If you haven't already downloaded the project files:
+
+1. On this GitHub page, click the green **"Code"** button near the top right
+2. Click **"Download ZIP"**
+3. Unzip the downloaded file — you'll get a folder called `AI-Literacy-for-Education`
+
+If you have Git installed, you can also clone it:
+```
+git clone https://github.com/YOUR_USERNAME/AI-Literacy-for-Education.git
+```
+
+---
+
+### Step 3 — Open a terminal in the project folder
+
+**On Mac:**
+
+1. Open **Terminal**
+2. Type `cd ` (with a space after it), then drag the project folder into the Terminal window — this fills in the path automatically
+3. Press Enter
+
+**On Windows:**
+
+1. Open the project folder in File Explorer
+2. Click the address bar at the top, type `cmd`, and press Enter — this opens Command Prompt already inside that folder
+
+---
+
+### Step 4 — Install dependencies
+
+This downloads everything the project needs to run. Type the following and press Enter:
+
+```
 npm install
+```
+
+Wait for it to finish — it may take a minute. You'll see a lot of text scroll by; that's normal.
+
+---
+
+### Step 5 — Start the app
+
+```
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+You'll see output that includes a line like:
+
+```
+  ➜  Local:   http://localhost:5173/
+```
+
+---
+
+### Step 6 — Open it in your browser
+
+Open your browser and go to:
+
+**[http://localhost:5173](http://localhost:5173)**
+
+The site will load. It automatically refreshes whenever you save a file.
+
+---
+
+### Stopping the app
+
+Go back to your terminal and press **`Ctrl + C`** (on both Mac and Windows) to stop the server.
 
 ---
 
