@@ -238,22 +238,26 @@ function AiAvatar() {
   const [tip, setTip] = useState(false)
   return (
     <div
-      style={{ position: 'relative', flexShrink: 0 }}
+      className="ai-avatar-wrap"
+      style={{ position: 'relative', flexShrink: 0, marginTop: 6 }}
       onMouseEnter={() => setTip(true)}
       onMouseLeave={() => setTip(false)}
     >
-      <div style={{
+      <div className="ai-avatar-ring"/>
+      <div className="ai-avatar-icon" style={{
         width: 28, height: 28, borderRadius: '50%',
         background: 'var(--surface)', border: '1px solid var(--border)',
         display: 'grid', placeItems: 'center',
-        color: 'var(--primary)', marginTop: 6, cursor: 'default',
+        color: 'var(--primary)', cursor: 'help',
+        transition: 'transform .2s, box-shadow .2s',
+        position: 'relative',
       }}>
         <Icon.Sparkle width={12} height={12}/>
       </div>
       {tip && (
         <div style={{
           position: 'absolute',
-          right: 'calc(100% + 8px)', top: 8,
+          right: 'calc(100% + 8px)', top: 4,
           background: 'var(--ink)',
           color: '#F3F1EE',
           fontFamily: 'var(--font-ui)',
@@ -294,7 +298,13 @@ function SectionView({ sectionId, content, sections, onPick }: {
   const next = sections[idx + 1]
 
   // Group blocks into conversation turns.
-  // An 'h' block starts a new user message; everything else accumulates into one AI bubble.
+  // An 'h' block starts a new user message only when the preceding AI buffer contains
+  // at least one "substantial" block (list, tools, callout, etc.). A lone paragraph
+  // before a heading stays in the AI bubble to avoid orphaned single-line responses.
+  const SUBSTANTIAL = new Set(['list', 'tools', 'callout', 'resources', 'promptPair', 'story'])
+  const hasSubstantial = (buf: AiContent[]) =>
+    buf.some(c => c.kind === 'block' && SUBSTANTIAL.has(c.block.type))
+
   const items: ConvItem[] = []
   items.push({ role: 'user', text: sec.question, itemKey: 'question' })
 
@@ -303,11 +313,14 @@ function SectionView({ sectionId, content, sections, onPick }: {
 
   sec.blocks.forEach((block, j) => {
     if (block.type === 'h') {
-      if (aiBuffer.length > 0) {
+      if (hasSubstantial(aiBuffer)) {
         items.push({ role: 'ai', contents: aiBuffer, itemKey: `ai-${j}` })
         aiBuffer = []
+        items.push({ role: 'user', text: block.text, itemKey: `user-h-${j}` })
+      } else {
+        // Not enough content before this heading — keep it inline in the AI bubble
+        aiBuffer.push({ kind: 'block', block })
       }
-      items.push({ role: 'user', text: block.text, itemKey: `user-h-${j}` })
     } else {
       aiBuffer.push({ kind: 'block', block })
     }
@@ -411,45 +424,65 @@ function NavLink({ dir, label, question, onClick }: {
 
   /* Next: chat prompt bar */
   return (
-    <button
-      onClick={onClick}
-      style={{
-        display: 'flex', alignItems: 'center', gap: 12,
-        width: '100%', padding: '11px 11px 11px 20px',
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: 100,
-        transition: 'border-color .18s, box-shadow .18s',
-        cursor: 'pointer', textAlign: 'left', color: 'var(--text)',
-      }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLButtonElement
-        el.style.borderColor = 'var(--primary-hover)'
-        el.style.boxShadow = '0 0 0 4px var(--primary-glow)'
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget as HTMLButtonElement
-        el.style.borderColor = 'var(--border)'
-        el.style.boxShadow = 'none'
-      }}
-    >
-      <span style={{
-        flex: 1, minWidth: 0,
-        fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.4,
-        color: 'var(--text-dim)',
-        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-      }}>
-        {question || label}
-      </span>
+    <div>
       <div style={{
-        width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
-        background: 'var(--primary)',
-        display: 'grid', placeItems: 'center',
-        color: '#0C0A08', fontSize: 17,
-        boxShadow: '0 2px 12px var(--primary-dim)',
-        transition: 'transform .15s, box-shadow .15s',
-      }}>↑</div>
-    </button>
+        display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8,
+      }}>
+        <span style={{ width: 14, height: 1, background: 'var(--primary)', opacity: 0.6, display: 'inline-block' }}/>
+        <span style={{
+          fontFamily: 'var(--font-ui)', fontSize: 10, fontWeight: 600,
+          letterSpacing: '0.16em', textTransform: 'uppercase',
+          color: 'var(--text-muted)',
+        }}>Next topic</span>
+      </div>
+      <button
+        onClick={onClick}
+        className="chat-next-bar"
+        style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          width: '100%', padding: '13px 13px 13px 22px',
+          background: 'var(--surface)',
+          border: '1px solid var(--primary-dim)',
+          borderRadius: 100,
+          boxShadow: '0 2px 12px var(--primary-glow), 0 1px 3px rgba(0,0,0,0.06)',
+          cursor: 'pointer', textAlign: 'left',
+          transition: 'border-color .18s, box-shadow .18s, background .18s',
+        }}
+        onMouseEnter={e => {
+          const el = e.currentTarget as HTMLButtonElement
+          el.style.borderColor = 'var(--primary-hover)'
+          el.style.boxShadow = '0 0 0 4px var(--primary-glow), 0 4px 20px var(--primary-soft)'
+          el.style.background = 'var(--bg-2)'
+          const circle = el.querySelector<HTMLDivElement>('.send-circle')
+          if (circle) circle.style.transform = 'scale(1.08) translateY(-1px)'
+        }}
+        onMouseLeave={e => {
+          const el = e.currentTarget as HTMLButtonElement
+          el.style.borderColor = 'var(--primary-dim)'
+          el.style.boxShadow = '0 2px 12px var(--primary-glow), 0 1px 3px rgba(0,0,0,0.06)'
+          el.style.background = 'var(--surface)'
+          const circle = el.querySelector<HTMLDivElement>('.send-circle')
+          if (circle) circle.style.transform = 'none'
+        }}
+      >
+        <span style={{
+          flex: 1, minWidth: 0,
+          fontFamily: 'var(--font-body)', fontSize: 14.5, lineHeight: 1.4,
+          color: 'var(--text-muted)',
+          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+        }}>
+          {question || label}
+        </span>
+        <div className="send-circle" style={{
+          width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+          background: 'var(--primary)',
+          display: 'grid', placeItems: 'center',
+          color: '#0C0A08', fontSize: 18,
+          boxShadow: '0 2px 10px var(--primary-dim)',
+          transition: 'transform .18s cubic-bezier(.34,1.4,.64,1)',
+        }}>↑</div>
+      </button>
+    </div>
   )
 }
 
@@ -467,7 +500,7 @@ function Welcome({ persona, content, sections, onPick }: {
     <div className="fade-in persona-welcome" style={{ maxWidth: 920, margin: '0 auto', padding: '80px 56px' }}>
       <div className="persona-welcome-hero" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 48, alignItems: 'center', marginBottom: 56 }}>
         <div>
-          <div style={{ fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 600, color: 'var(--primary)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 14 }}>
+          <div style={{ fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 14 }}>
             {isStudent ? 'Student perspective' : 'Teacher perspective'}
           </div>
           <h1 className="display" style={{ margin: '0 0 20px', fontSize: 'clamp(34px, 3.6vw, 48px)', lineHeight: 1.2 }}>{heading}</h1>
@@ -510,21 +543,19 @@ function Welcome({ persona, content, sections, onPick }: {
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-2)'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--surface)'; }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 900, color: 'var(--primary)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 6 }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 900, color: 'var(--text-muted)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 6 }}>
                   Start here
                 </div>
                 <div style={{ fontSize: 16, lineHeight: 1.5, color: 'var(--text)', fontWeight: 500 }}>{q}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: 20, color: 'var(--primary)', flexShrink: 0, opacity: 0.6 }}>→</span>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: 20, color: 'var(--text-dim)', flexShrink: 0 }}>→</span>
             </button>
           ) : (
             <button key={s.id} onClick={() => onPick(s.id)} className="card" style={{
-              padding: '16px 20px', textAlign: 'left', color: 'var(--text)', transition: 'all .15s', cursor: 'pointer',
-            }}
-            onMouseEnter={e => { const el = e.currentTarget; el.style.borderColor = 'var(--primary-hover)'; el.style.transform = 'translateY(-2px)'; el.style.boxShadow = '0 4px 16px rgba(85,73,64,0.1), 0 12px 32px var(--primary-soft)'; }}
-            onMouseLeave={e => { const el = e.currentTarget; el.style.borderColor = 'var(--border)'; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 1px 4px rgba(85,73,64,0.08), 0 4px 16px rgba(85,73,64,0.06)'; }}>
+              padding: '16px 20px', textAlign: 'left', color: 'var(--text)', cursor: 'pointer',
+            }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                <span style={{ fontFamily: 'var(--font-ui)', fontSize: 10, fontWeight: 700, color: 'var(--primary)', letterSpacing: '0.1em' }}>
+                <span style={{ fontFamily: 'var(--font-ui)', fontSize: 10, fontWeight: 700, color: 'var(--text-dim)', letterSpacing: '0.1em' }}>
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span style={{ fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>

@@ -64,10 +64,8 @@ function StatCard({ target, label, source, index, triggered }: {
       </div>
       <div style={{
         fontFamily: 'var(--font-ui)',
-        fontSize: 10,
-        letterSpacing: '0.1em',
-        textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.24)',
+        fontSize: 11,
+        color: 'rgba(255,255,255,0.5)',
       }}>
         {source}
       </div>

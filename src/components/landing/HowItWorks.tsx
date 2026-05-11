@@ -43,7 +43,7 @@ export function HowItWorks() {
           <div style={{
             fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 600,
             letterSpacing: '0.22em', textTransform: 'uppercase',
-            color: 'var(--primary)', marginBottom: 18,
+            color: 'var(--text-muted)', marginBottom: 18,
             display: 'flex', alignItems: 'center', gap: 10,
           }}>
             <span style={{ width: 20, height: 1, background: 'var(--primary)', display: 'inline-block', flexShrink: 0 }}/>

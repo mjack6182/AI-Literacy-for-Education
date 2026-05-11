@@ -94,7 +94,7 @@ export function WhatIsAI() {
         }}>
           <div style={{
             fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 600,
-            letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--primary)',
+            letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--text-muted)',
             display: 'flex', alignItems: 'center', gap: 10,
           }}>
             <span style={{ width: 20, height: 1, background: 'var(--primary)', display: 'inline-block', flexShrink: 0 }}/>
@@ -158,7 +158,7 @@ export function WhatIsAI() {
             <div style={{
               fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 600,
               letterSpacing: '0.22em', textTransform: 'uppercase',
-              color: 'var(--primary)', marginBottom: 14,
+              color: 'var(--text-muted)', marginBottom: 14,
             }}>{tab.kicker} · {tab.label}</div>
             <h3 className="display" style={{
               fontSize: 'clamp(32px, 3.2vw, 44px)', fontWeight: 400,

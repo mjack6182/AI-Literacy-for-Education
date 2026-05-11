@@ -112,7 +112,7 @@ export function ContentBlock({ block }: { block: Block }) {
           fontFamily: 'var(--font-display)', fontSize: 80, lineHeight: 0.8,
           color: 'var(--primary)', opacity: 0.3, userSelect: 'none', pointerEvents: 'none',
         }}>"</div>
-        <div style={{ fontFamily: 'var(--font-ui)', fontSize: 10, color: 'var(--primary)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8, fontWeight: 700, opacity: 0.9 }}>
+        <div style={{ fontFamily: 'var(--font-ui)', fontSize: 10, color: 'var(--text-muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8, fontWeight: 700 }}>
           Real example · {block.who}
         </div>
         <div style={{ fontSize: 15.5, lineHeight: 1.7, color: 'var(--text)', fontStyle: 'italic' }}>{block.text}</div>

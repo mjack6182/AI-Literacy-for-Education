@@ -37,8 +37,7 @@ function PersonaCard({ to, role, tagline, illo, delay }: PersonaCardProps) {
         <img src={illo} alt="" className="float" style={{ maxHeight: 260, width: 'auto', maxWidth: '100%' }}/>
       </div>
       <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-ui)', fontSize: 26, fontWeight: 700, color: 'var(--text)' }}>{role}</h3>
-      <p style={{ margin: '0 0 28px', fontSize: 16, color: 'var(--text-muted)' }}>{tagline}</p>
-      <div><span className="btn solid">Learn More</span></div>
+      <p style={{ margin: 0, fontSize: 16, color: 'var(--text-muted)' }}>{tagline}</p>
     </Link>
   )
 }
