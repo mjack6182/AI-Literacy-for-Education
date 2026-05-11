@@ -1,0 +1,21 @@
+.persona-picker {
+  padding: 120px 80px 140px;
+}
+
+@media (max-width: 900px) {
+  .persona-picker {
+    padding: 92px 28px 108px;
+  }
+
+  .persona-picker-grid {
+    grid-template-columns: 1fr !important;
+    max-width: 680px !important;
+    gap: 20px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .persona-picker {
+    padding: 76px 18px 88px;
+  }
+}

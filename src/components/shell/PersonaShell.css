@@ -1,0 +1,102 @@
+/* ---- Per-persona color themes ---- */
+.persona-student {
+  --primary:        #C9AD93;
+  --primary-2:      #B89D83;
+  --primary-soft:   rgba(201,173,147,0.18);
+  --primary-tint:   rgba(201,173,147,0.09);
+  --primary-subtle: rgba(201,173,147,0.11);
+  --primary-dim:    rgba(201,173,147,0.28);
+  --primary-hover:  rgba(201,173,147,0.4);
+  --primary-glow:   rgba(201,173,147,0.08);
+}
+
+.persona-teacher {
+  --primary:        #8BAFC2;
+  --primary-2:      #7A9EB5;
+  --primary-soft:   rgba(139,175,194,0.18);
+  --primary-tint:   rgba(139,175,194,0.09);
+  --primary-subtle: rgba(139,175,194,0.11);
+  --primary-dim:    rgba(139,175,194,0.28);
+  --primary-hover:  rgba(139,175,194,0.4);
+  --primary-glow:   rgba(139,175,194,0.08);
+}
+
+.persona-layout {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Strip trailing margin from the last element inside chat bubbles */
+.chat-bubble-content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Tighten user message padding on narrow screens */
+@media (max-width: 640px) {
+  .chat-user-msg { padding-left: 40px !important; }
+  .chat-ai-msg   { padding-right: 24px !important; }
+}
+
+.persona-main {
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .persona-article,
+  .persona-welcome {
+    padding: 48px 28px 64px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .persona-layout {
+    flex-direction: column;
+  }
+
+  .persona-sidebar {
+    width: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    position: static !important;
+    top: auto !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .persona-sidebar-nav {
+    max-height: 240px;
+  }
+
+  .persona-main {
+    width: 100%;
+    min-height: auto !important;
+  }
+
+  .persona-section-intro,
+  .persona-welcome-hero {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .persona-section-nav {
+    flex-direction: column;
+  }
+
+  .persona-nav-link {
+    width: 100%;
+    min-width: 0 !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  .persona-welcome-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .persona-article,
+  .persona-welcome {
+    padding: 34px 18px 48px !important;
+  }
+}

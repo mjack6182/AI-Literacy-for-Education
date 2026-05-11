@@ -1,0 +1,35 @@
+/* ============ AI Literacy — Design tokens (minimalist earthy light palette) ============ */
+:root {
+  /* Backgrounds — warm whites and creams */
+  --bg:          #FAFAF8;
+  --bg-2:        #F3F1EE;
+  --surface:     #FFFFFF;
+  --ink:         #1A1714;   /* sidebar — near-black warm */
+  --ink-2:       #251E19;
+
+  /* Text */
+  --text:        #1A1714;   /* near-black warm */
+  --text-on-dark:#F3F1EE;
+  --text-muted:  #554940;   /* Taupe */
+  --text-dim:    #8A8580;   /* medium warm gray */
+
+  /* Borders */
+  --border:      rgba(85,73,64,0.12);
+  --border-soft: rgba(85,73,64,0.06);
+
+  /* Primary — Beige */
+  --primary:      #C9AD93;
+  --primary-2:    #B89D83;
+  --primary-soft:   rgba(201,173,147,0.18);
+  --primary-tint:   rgba(201,173,147,0.09);
+  --primary-subtle: rgba(201,173,147,0.11);
+  --primary-dim:    rgba(201,173,147,0.28);
+  --primary-hover:  rgba(201,173,147,0.4);
+  --primary-glow:   rgba(201,173,147,0.08);
+  --accent:       #C9AD93;
+  --pink:         #C9AD93;
+
+  --font-display: 'Big Shoulders Display', 'Impact', sans-serif;
+  --font-body:    'Zain', 'Inter', system-ui, sans-serif;
+  --font-ui:      'Inter', system-ui, sans-serif;
+}
